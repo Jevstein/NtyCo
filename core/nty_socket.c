@@ -113,7 +113,6 @@ static int nty_poll_inner(struct pollfd *fds, nfds_t nfds, int timeout) {
 	return nfds;
 }
 
-
 int nty_socket(int domain, int type, int protocol) {
 
 	int fd = socket(domain, type, protocol);
