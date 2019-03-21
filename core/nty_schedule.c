@@ -334,7 +334,7 @@ void nty_schedule_run(void) {
 		nty_schedule_epoll(sched);
 		while (sched->num_new_events) {
 			int idx = --sched->num_new_events;
-			struct epoll_event *ev = sched->eventlist+idx;
+			struct epoll_event *ev = sched->eventlist + idx;
 			
 			int fd = ev->data.fd;
 			int is_eof = ev->events & EPOLLHUP;
