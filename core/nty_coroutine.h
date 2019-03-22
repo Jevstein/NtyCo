@@ -125,13 +125,13 @@ typedef struct _nty_coroutine_rbtree_wait nty_coroutine_rbtree_wait;
 
 
 typedef struct _nty_cpu_ctx {
-	void *esp; //
-	void *ebp;
-	void *eip;
-	void *edi;
-	void *esi;
-	void *ebx;
-	void *r1;
+	void *esp; //栈指针寄存器，指向栈顶
+	void *ebp; //用作数据存储，遵循调用者使用规则
+	void *eip; //用来存储CPU运行下一条指令的地址。这里把回调函数的地址存储到EIP中，将相应的参数存储到相应的参数寄存器中
+	void *edi; //用作函数参数，依次对应第1参数，第2参数，...
+	void *esi; //用作函数参数，依次对应第1参数，第2参数，...
+	void *ebx; //用作数据存储，遵循调用者使用规则
+	void *r1;  //以下：用作数据存储，遵循调用者使用规则（换句话说，就是随便用）。调用子函数之前要备份它，以防它被修改
 	void *r2;
 	void *r3;
 	void *r4;

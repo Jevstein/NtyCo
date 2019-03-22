@@ -310,12 +310,13 @@ void nty_schedule_run(void) {
 
 	while (!nty_schedule_isdone(sched)) {
 		
-		// 1. expired --> sleep rbtree
+		// 1. expired --> sleep rbtree：遍历睡眠集合，使用resume恢复expired的协程运行权
 		nty_coroutine *expired = NULL;
 		while ((expired = nty_schedule_expired(sched)) != NULL) {
 			nty_coroutine_resume(expired);
 		}
-		// 2. ready queue
+
+		// 2. ready queue：遍历等待集合，使用resume恢复wait的协程运行权
 		nty_coroutine *last_co_ready = TAILQ_LAST(&sched->ready, _nty_coroutine_queue);
 		while (!TAILQ_EMPTY(&sched->ready)) {
 			nty_coroutine *co = TAILQ_FIRST(&sched->ready);
@@ -330,7 +331,7 @@ void nty_schedule_run(void) {
 			if (co == last_co_ready) break;
 		}
 
-		// 3. wait rbtree
+		// 3. wait rbtree：使用resume恢复ready的协程运行权
 		nty_schedule_epoll(sched);
 		while (sched->num_new_events) {
 			int idx = --sched->num_new_events;
